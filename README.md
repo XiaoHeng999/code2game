@@ -143,28 +143,77 @@ assets/generated_glb/<game-name>/
 
 ## 整体框架与执行流程
 
-项目按照“场景理解 → 玩法规划 → 资产实现 → Blender 执行 → 动作与渲染”的顺序运行：
+项目按照“场景理解 → 玩法规划 → 资产实现 → Blender 执行 → 动作与渲染”的顺序运行。GitHub 会自动渲染下面的 Mermaid 流程图：
+
+```mermaid
+flowchart TD
+    IN["输入<br/>场景 .blend<br/>游戏意图<br/>NPC FBX"]
+
+    subgraph PLAN["一、场景与玩法规划"]
+        S1["1. 提取默认相机和场景信息"]
+        S2["2. VLM 场景理解"]
+        S3["3. 生成游戏规则和玩法目标"]
+        S4["4. 提取场景中的候选位置"]
+        S5["5. 生成受场景约束的摆放方案"]
+        S1 --> S2 --> S3 --> S4 --> S5
+    end
+
+    subgraph ASSET["二、资产规划与场景组装"]
+        A1["6. 规划游戏资产"]
+        A2["7. 生成或复用 GLB 资产"]
+        A3["8. 将资产导入 Blender"]
+        A4["9. 导入并摆放动画 NPC"]
+        A1 --> A2 --> A3 --> A4
+    end
+
+    subgraph GAMEPLAY["三、玩法执行与渲染"]
+        G1["10. 生成游戏路径"]
+        G2["11. 生成角色动作和跟随相机"]
+        G3["渲染 gameplay 视频"]
+        G1 --> G2 --> G3
+    end
+
+    OUT["输出<br/>gaming_world.blend<br/>gameplay.mp4"]
+
+    IN --> S1
+    S5 --> A1
+    A4 --> G1
+    G3 --> OUT
+
+    classDef input fill:#e8f1ff,stroke:#4f83cc,color:#17365d
+    classDef planning fill:#fff4df,stroke:#d99a2b,color:#5a3b00
+    classDef asset fill:#e8f7ed,stroke:#4b9b68,color:#1e4d2b
+    classDef gameplay fill:#f2eaff,stroke:#8b61c2,color:#39205f
+    classDef output fill:#ffe8e8,stroke:#c95757,color:#651f1f
+
+    class IN input
+    class S1,S2,S3,S4,S5 planning
+    class A1,A2,A3,A4 asset
+    class G1,G2,G3 gameplay
+    class OUT output
+```
+
+各阶段之间通过 JSON、图像、GLB、Blender 场景和视频等中间产物衔接：
 
 ```text
-场景 .blend + 游戏意图 + NPC FBX
-              │
-              ▼
-┌─────────────────────────────┐
-│ 1. 提取默认相机和场景信息     │
-│ 2. VLM 场景理解               │
-│ 3. 生成游戏规则和玩法目标     │
-│ 4. 提取场景中的候选位置       │
-│ 5. 生成受场景约束的摆放方案   │
-│ 6. 规划游戏资产               │
-│ 7. 生成或复用 GLB 资产         │
-│ 8. 将资产导入 Blender          │
-│ 9. 导入并摆放动画 NPC          │
-│10. 生成游戏路径               │
-│11. 生成动作、相机和视频        │
-└─────────────────────────────┘
-              │
-              ▼
-       gaming_world.blend + gameplay.mp4
+场景分析与玩法规划
+    └── default_camera_packet/
+        ├── default_camera_metadata.json
+        ├── scene_understanding_default_camera.json
+        ├── game_rule_plan.json
+        ├── placement_candidates.json
+        └── gameplay_placement_plan.json
+
+资产规划与生成
+    └── asset_realization/ + asset_generation/ + assets/generated_glb/
+
+Blender 场景组装
+    └── staged_scene.blend
+
+玩法路径与最终渲染
+    └── gameplay_path/ + gameplay_output/
+        ├── gaming_world.blend
+        └── gameplay.mp4
 ```
 
 对应的代码模块如下：
