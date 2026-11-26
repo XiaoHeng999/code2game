@@ -1,0 +1,21 @@
+# This public repository intentionally tracks only the curated pipeline source.
+# Everything else is denied by default so large generated assets cannot be
+# added accidentally with `git add .`.
+*
+
+!/.gitignore
+!/README.md
+!/requirements.txt
+!/figure5_pipeline.png
+
+!/shared_representation/
+!/shared_representation/**
+!/scene_and_gameplay_planning/
+!/scene_and_gameplay_planning/**
+!/game_realization/
+!/game_realization/**
+!/gameplay_logic/
+!/gameplay_logic/**
+!/scripts/
+!/scripts/**
+**/__pycache__/

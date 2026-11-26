@@ -1,0 +1,13 @@
+{
+  "surface_overrides": [
+    {"object_prefix": "Terrain / continuous river valley", "surface_type": "ground"},
+    {"object_prefix": "Bridge_Bluestone_Paving", "surface_type": "ground"},
+    {"object_prefix": "Water /", "surface_type": "water"}
+  ],
+  "exclude_volume_only_from_raycast": true,
+  "placement_context": {
+    "label": "stone bridge",
+    "object_prefix": "Bridge_",
+    "max_distance_xy_m": 12.0
+  }
+}

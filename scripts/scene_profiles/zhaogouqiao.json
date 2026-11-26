@@ -1,0 +1,9 @@
+{
+  "description": "Explicit surface labels for the existing Zhaogouqiao authored scene; does not change geometry or support thresholds.",
+  "surface_overrides": [
+    {"object_prefix": "Terrain / continuous river valley", "surface_type": "ground"},
+    {"object_prefix": "Bridge_Bluestone_Paving", "surface_type": "ground"},
+    {"object_prefix": "Water /", "surface_type": "water"}
+  ],
+  "exclude_volume_only_from_raycast": true
+}
